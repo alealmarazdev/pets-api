@@ -1,52 +1,36 @@
 // dependencis
 const express = require('express')
 
+const usersRouter = require('./routes/users')
+const petsRouter = require('./routes/pets')
 // own package
 // const routes = requiere('./routes')
-const user = require('./usecases/user')
-const pet = require('./usecases/pet')
+/* const user = require('./usecases/user') */
+/* const pet = require('./usecases/pet') */
 
 // app const var
+
 var app = express()
 const port = 8080
 
 app.use(express.json())
+app.use('/users', usersRouter)
+app.use('/pets', petsRouter)
 
-app.get('/hola', (request, response) => {
+app.get('/', (request, response) => {
   response.json({
-    message: 'hola desde el servidor'
+    success: true,
+    message: 'pet api version 1'
   })
 })
 
-app.post('/users', (req, res) => {
-  try {
-    const newUserData = req.body
-    const newUser = user.signUp(newUserData)
-    res.json({
-      success: true,
-      message: 'User createds successfully',
-      payload: {
-        user: newUser
-      }
-    })
-  } catch (error) {
-    console.error('error: ', error)
-    res.status = 400
-    res.json({
-      success: false,
-      message: 'cannot create user',
-      error: error.message
-    })
-  }
-})
-
-app.post('/pets', (req, res) => {
+/* app.post('/pets', (req, res) => {
   try {
     const newPetData = req.body
     const newPet = pet.registration(newPetData)
     res.json({
       success: true,
-      message: 'pet createds successfully',
+      message: 'pet created successfully',
       payload: {
         user: newPet
       }
@@ -60,7 +44,7 @@ app.post('/pets', (req, res) => {
       error: error.message
     })
   }
-})
+}) */
 
 module.exports = {
   server: app,

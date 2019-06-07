@@ -1,6 +1,7 @@
 const { model: User } = require('../models/user')
+const bcrypt = require('../lib/bcrypt')
 
-const signUp = (userData = {}) => {
+const signUp = async (userData = {}) => {
   const {
     email,
     name,
@@ -12,12 +13,14 @@ const signUp = (userData = {}) => {
     phone
   } = userData
 
+  const hash = await bcrypt.hash(password)
+
   const user = new User({
     email,
     name,
     lastName,
     age,
-    password,
+    password: hash,
     type,
     address,
     phone
@@ -28,6 +31,29 @@ const signUp = (userData = {}) => {
   return user.save()
 }
 
+const getAll = async () => {
+  const allUser = await User.find().lean()
+  const cleanUsers = allUser.map((user) => {
+    const { password, ...cleanUser } = user
+    return cleanUser
+  })
+  return cleanUsers
+}
+
+const getById = async (userId) => {
+  const user = await User.findById(userId).lean()
+  const { password, ...cleanUser } = user
+  return cleanUser
+}
+
+const deleteById = (userId) => User.findByIdAndDelete(userId)
+
+const updateById = (userId, userData) => User.findByIdAndUpdate(userId, userData)
+
 module.exports = {
-  signUp
+  signUp,
+  getAll,
+  getById,
+  deleteById,
+  updateById
 }
