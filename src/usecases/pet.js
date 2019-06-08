@@ -36,7 +36,7 @@ const getAll = async () => {
   const allPet = await Pet.find().lean()
   const cleanPets = allPet.map((pet) => {
     const { password, ...cleanPet } = pet
-    return cleanPet
+ta   return cleanPet
   })
   return cleanPets
 }
