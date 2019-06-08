@@ -9,7 +9,7 @@ router.use(express.json())
 router.post('/', (req, res) => {
   try {
     const newUserData = req.body
-    const newUser = pet.signUp(newUserData)
+    const newUser = pet.createPet(newUserData)
     res.json({
       success: true,
       message: 'User createds successfully',
@@ -74,12 +74,12 @@ router.get('/:id', async (request, response) => {
 router.delete('/:id', async (request, response) => {
   try {
     const { id } = request.params
-    const deleteUser = await user.deleteById(id)
+    const deletePet = await pet.deleteById(id)
     response.json({
       success: true,
       message: 'user deleted',
       payload: {
-        user: deleteUser
+        user: deletePet
       }
     })
   } catch (error) {
@@ -97,7 +97,7 @@ router.put('/:id', async (request, response) => {
   try {
     const { id } = request.params
     const newUserData = request.body
-    const updatedUser = await user.updateById(id, newUserData)
+    const updatedUser = await pet.updateById(id, newUserData)
     response.json({
       success: true,
       message: 'user updated',
